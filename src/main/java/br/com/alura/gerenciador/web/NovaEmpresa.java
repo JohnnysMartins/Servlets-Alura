@@ -14,7 +14,7 @@ import br.com.alura.gerenciador.dao.EmpresaDAO;
 
 
 
-@WebServlet (urlPatterns = "/novaEmpresa")
+
 public class NovaEmpresa implements Tarefa{
 	
 	@Override
@@ -22,9 +22,8 @@ public class NovaEmpresa implements Tarefa{
 		String nome = req.getParameter("nome");
 		Empresa empresa = new Empresa(nome);
 		new EmpresaDAO().adiciona(empresa);
-		req.setAttribute("nome", nome);
+		req.getSession().setAttribute("nome", nome);
 	    return "/WEB-INF/paginas/novaEmpresa.jsp";
 
-	}
-	
+	}	
 }
