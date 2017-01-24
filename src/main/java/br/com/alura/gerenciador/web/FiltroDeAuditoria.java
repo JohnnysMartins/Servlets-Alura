@@ -9,7 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.tomcat.util.http.Cookies;
 
 @WebFilter(urlPatterns = "/*")
 public class FiltroDeAuditoria implements Filter {
@@ -23,6 +26,13 @@ public class FiltroDeAuditoria implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		String uri = req.getRequestURI();
+		String usuario = "<Deslogado>";
+		Cookie[] cookies = req.getCookies();
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals("Usuario.logado")) {
+				usuario = cookie.getValue();
+			}
+		}
 		System.out.println("Usuario acessando a URI: " + uri);
 		chain.doFilter(request, response);
 	}
