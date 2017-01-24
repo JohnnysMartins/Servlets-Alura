@@ -14,20 +14,29 @@ import br.com.alura.gerenciador.Usuario;
 import br.com.alura.gerenciador.dao.UsuarioDAO;
 
 @WebServlet(urlPatterns = "/login")
-public class Login extends HttpServlet{
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
-			throws ServletException, IOException {
-		String email = req.getParameter("email");
-		String senha = req.getParameter("senha");
-		Usuario usuario = new UsuarioDAO().buscaPorEmailESenha(email, senha);
-		PrintWriter writer = resp.getWriter();
-		if(usuario == null){
-			writer.println("<html><body> Usuario invalido !</body></html>");
-		} else{
-			Cookie cookie = new Cookie("usuario.logado", email);
-			resp.addCookie(cookie);
-			writer.println("<html><body> Usuario: "+ email +" logado com sucesso !</body></html>");
-		}
-	}
+public class Login extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        PrintWriter writer = resp.getWriter();
+
+        String email = req.getParameter("email");
+        String senha = req.getParameter("senha");
+
+        Usuario usuario = new UsuarioDAO().buscaPorEmailESenha(email, senha);
+
+        if (usuario == null) {
+            writer.println("<html><body>Usuário ou senha inválida</body></html>");
+        } else {
+            Cookie cookie = new Cookie("usuario.logado", email);
+            cookie.setMaxAge(60 * 10); 
+            resp.addCookie(cookie);
+            writer.println("<html><body>Usuário logado: " + email
+                    + "</body></html>");
+        }
+
+    }
+
 }
