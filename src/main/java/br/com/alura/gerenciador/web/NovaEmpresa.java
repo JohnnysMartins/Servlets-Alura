@@ -15,16 +15,16 @@ import br.com.alura.gerenciador.dao.EmpresaDAO;
 
 
 @WebServlet (urlPatterns = "/novaEmpresa")
-public class NovaEmpresa extends HttpServlet{
+public class NovaEmpresa implements Tarefa{
 	
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
-			throws ServletException, IOException {
+	public String executa(HttpServletRequest req, HttpServletResponse resp) {
 		String nome = req.getParameter("nome");
 		Empresa empresa = new Empresa(nome);
 		new EmpresaDAO().adiciona(empresa);
-		PrintWriter writer = resp.getWriter();
-		writer.println("<html><body>Empresa Adicionado com sucesso: " + empresa.getNome() + "</body></html>");
+		req.setAttribute("nome", nome);
+	    return "/WEB-INF/paginas/novaEmpresa.jsp";
+
 	}
 	
 }

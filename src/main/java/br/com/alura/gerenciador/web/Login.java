@@ -18,28 +18,26 @@ import br.com.alura.gerenciador.Usuario;
 import br.com.alura.gerenciador.dao.UsuarioDAO;
 
 @WebServlet(urlPatterns = "/login")
-public class Login extends HttpServlet {
+public class Login implements Tarefa {
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+	@Override
+	public String executa(HttpServletRequest req, HttpServletResponse resp) {
+		 PrintWriter writer = resp.getWriter();
 
-        PrintWriter writer = resp.getWriter();
+	        String email = req.getParameter("email");
+	        String senha = req.getParameter("senha");
 
-        String email = req.getParameter("email");
-        String senha = req.getParameter("senha");
+	        Usuario usuario = new UsuarioDAO().buscaPorEmailESenha(email, senha);
 
-        Usuario usuario = new UsuarioDAO().buscaPorEmailESenha(email, senha);
-
-        if (usuario == null) {
-            writer.println("<html><body>Usuário ou senha inválida</body></html>");
-        } else {
-        	HttpSession session = req.getSession();
-        	session.setAttribute("Usuario.logado", usuario);
-            writer.println("<html><body>Usuário logado: " + email
-                    + "</body></html>");
-        }
-
-    }
+	        if (usuario == null) {
+	            writer.println("<html><body>Usuário ou senha inválida</body></html>");
+	        } else {
+	        	HttpSession session = req.getSession();
+	        	session.setAttribute("usuarioLogado", usuario);
+	            writer.println("<html><body>Usuário logado: " + email
+	                    + "</body></html>");
+	        }
+		return null;
+	}
 
 }
